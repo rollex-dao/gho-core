@@ -195,14 +195,14 @@ makeSuite('Gho FlashMinter', (testEnv: TestEnv) => {
   });
 
   it('Fund FlashBorrower To Repay FlashMint Fees (Maximum Bucket Capacity Minus 1)', async function () {
-    const { users, flashMinter, pool, weth, gho, faucetOwner, aaveOracle } = testEnv;
+    const { users, flashMinter, pool, weth, gho, faucetOwner, rexOracle } = testEnv;
 
     const flashMinterFacilitator = await gho.getFacilitator(flashMinter.address);
     const capacityMinusOne = flashMinterFacilitator.bucketCapacity.sub(1);
     const expectedFee = capacityMinusOne.percentMul(flashFee);
 
-    const ghoPrice = await aaveOracle.getAssetPrice(gho.address);
-    const wethPrice = await aaveOracle.getAssetPrice(weth.address);
+    const ghoPrice = await rexOracle.getAssetPrice(gho.address);
+    const wethPrice = await rexOracle.getAssetPrice(weth.address);
     const expectedRequiredCollateral = expectedFee.mul(ghoPrice).div(wethPrice).mul(2);
     await mintErc20(faucetOwner, weth.address, [users[0].address], expectedRequiredCollateral);
 
@@ -247,14 +247,14 @@ makeSuite('Gho FlashMinter', (testEnv: TestEnv) => {
   });
 
   it('Fund FlashBorrower To Repay FlashMint Fees (Maximum Bucket Capacity)', async function () {
-    const { users, flashMinter, pool, weth, gho, faucetOwner, aaveOracle } = testEnv;
+    const { users, flashMinter, pool, weth, gho, faucetOwner, rexOracle } = testEnv;
 
     const flashMinterFacilitator = await gho.getFacilitator(flashMinter.address);
     const capacity = flashMinterFacilitator.bucketCapacity;
     const expectedFee = capacity.percentMul(flashFee);
 
-    const ghoPrice = await aaveOracle.getAssetPrice(gho.address);
-    const wethPrice = await aaveOracle.getAssetPrice(weth.address);
+    const ghoPrice = await rexOracle.getAssetPrice(gho.address);
+    const wethPrice = await rexOracle.getAssetPrice(weth.address);
     const expectedRequiredCollateral = expectedFee.mul(ghoPrice).div(wethPrice).mul(2);
     await mintErc20(faucetOwner, weth.address, [users[0].address], expectedRequiredCollateral);
 
@@ -330,7 +330,7 @@ makeSuite('Gho FlashMinter', (testEnv: TestEnv) => {
   });
 
   it('Fund FlashBorrower To Repay FlashMint Fees (New Maximum Bucket Capacity)', async function () {
-    const { users, flashMinter, pool, weth, gho, faucetOwner, aaveOracle } = testEnv;
+    const { users, flashMinter, pool, weth, gho, faucetOwner, rexOracle } = testEnv;
 
     const flashMinterFacilitator = await gho.getFacilitator(flashMinter.address);
     const capacity = flashMinterFacilitator.bucketCapacity;
@@ -338,8 +338,8 @@ makeSuite('Gho FlashMinter', (testEnv: TestEnv) => {
 
     const expectedFee = capacity.percentMul(flashFee);
 
-    const ghoPrice = await aaveOracle.getAssetPrice(gho.address);
-    const wethPrice = await aaveOracle.getAssetPrice(weth.address);
+    const ghoPrice = await rexOracle.getAssetPrice(gho.address);
+    const wethPrice = await rexOracle.getAssetPrice(weth.address);
     const expectedRequiredCollateral = expectedFee.mul(ghoPrice).div(wethPrice).mul(2);
     await mintErc20(faucetOwner, weth.address, [users[0].address], expectedRequiredCollateral);
 

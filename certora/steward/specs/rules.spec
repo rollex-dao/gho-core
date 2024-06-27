@@ -4,7 +4,7 @@ using FixedRateStrategyFactory as FAC;
 /*===========================================================================
   This is a specification file for the contract GhoStewardV2.
   The rules were written base on the following:
-  https://github.com/aave/gho-core/pull/388
+  https://github.com/rex/gho-core/pull/388
 
   We check the following aspects:
   - Limitations due to timelocks.

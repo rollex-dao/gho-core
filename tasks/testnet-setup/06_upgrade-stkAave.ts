@@ -2,40 +2,38 @@ import { task } from 'hardhat/config';
 import {
   getAaveProtocolDataProvider,
   getProxyAdminBySlot,
-  STAKE_AAVE_PROXY,
-} from '@aave/deploy-v3';
+  STAKE_REX_PROXY,
+} from '@pollum-io/lending-deploy';
 import { getBaseImmutableAdminUpgradeabilityProxy } from '../../helpers/contract-getters';
 import { impersonateAccountHardhat } from '../../helpers/misc-utils';
-import { StakedAaveV3__factory } from '../../types';
+import { StakedREXV3__factory } from '../../types';
 
-task('upgrade-stkAave', 'Upgrade Staked Aave').setAction(async (_, hre) => {
+task('upgrade-stkRex', 'Upgrade Staked Aave').setAction(async (_, hre) => {
   const { ethers } = hre;
   const signers = await hre.ethers.getSigners();
   const shortExecutor = '0xee56e2b3d491590b5b31738cc34d5232f378a8d5';
 
   const gho = await ethers.getContract('GhoToken');
-  const aaveDataProvider = await getAaveProtocolDataProvider();
-  const newStakedAaveImpl = await ethers.getContract('StakedAaveV3Impl');
-  const stkAave = (await hre.deployments.get(STAKE_AAVE_PROXY)).address;
+  const rexDataProvider = await getAaveProtocolDataProvider();
+  const newStakedREXImpl = await ethers.getContract('StakedREXV3Impl');
+  const stkRex = (await hre.deployments.get(STAKE_REX_PROXY)).address;
 
-  const admin = await getProxyAdminBySlot(stkAave);
+  const admin = await getProxyAdminBySlot(stkRex);
 
   const signerAdmin = signers.find(({ address }) => address == admin);
   const [deploySigner] = signers;
 
   if (!signerAdmin) {
-    throw `Error: Signers does not contain the stkAave Admin Address.\nDeployer ${signers[0].address}\nAdmin: ${admin}`;
+    throw `Error: Signers does not contain the stkRex Admin Address.\nDeployer ${signers[0].address}\nAdmin: ${admin}`;
   }
 
-  const stkAaveProxy = (await getBaseImmutableAdminUpgradeabilityProxy(stkAave)).connect(
-    signerAdmin
-  );
+  const stkRexProxy = (await getBaseImmutableAdminUpgradeabilityProxy(stkRex)).connect(signerAdmin);
 
-  const tokenProxyAddresses = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+  const tokenProxyAddresses = await rexDataProvider.getReserveTokensAddresses(gho.address);
   const ghoVariableDebtTokenAddress = tokenProxyAddresses.variableDebtTokenAddress;
-  let instance = StakedAaveV3__factory.connect(stkAaveProxy.address, deploySigner);
+  let instance = StakedREXV3__factory.connect(stkRexProxy.address, deploySigner);
 
-  const stakedAaveEncodedInitialize = newStakedAaveImpl.interface.encodeFunctionData('initialize', [
+  const stakedAaveEncodedInitialize = newStakedREXImpl.interface.encodeFunctionData('initialize', [
     signerAdmin.address,
     signerAdmin.address,
     signerAdmin.address,
@@ -43,18 +41,18 @@ task('upgrade-stkAave', 'Upgrade Staked Aave').setAction(async (_, hre) => {
     await instance.COOLDOWN_SECONDS(),
   ]);
 
-  const upgradeTx = await stkAaveProxy.upgradeToAndCall(
-    newStakedAaveImpl.address,
+  const upgradeTx = await stkRexProxy.upgradeToAndCall(
+    newStakedREXImpl.address,
     stakedAaveEncodedInitialize
   );
   await upgradeTx.wait();
 
-  instance = await StakedAaveV3__factory.connect(
-    stkAaveProxy.address,
+  instance = await StakedREXV3__factory.connect(
+    stkRexProxy.address,
     await impersonateAccountHardhat(shortExecutor)
   );
   await instance.setGHODebtToken(ghoVariableDebtTokenAddress);
 
-  console.log(`stkAave upgradeTx.hash: ${upgradeTx.hash}`);
-  console.log(`StkAave implementation set to: ${newStakedAaveImpl.address}`);
+  console.log(`stkRex upgradeTx.hash: ${upgradeTx.hash}`);
+  console.log(`StkRex implementation set to: ${newStakedREXImpl.address}`);
 });

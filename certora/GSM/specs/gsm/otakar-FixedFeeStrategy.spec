@@ -1,6 +1,6 @@
 // verifies properties of FixedFeestrategy
 
-import "../GsmMethods/aave_fee_limits.spec";
+import "../GsmMethods/rex_fee_limits.spec";
 import "../GsmMethods/methods_divint_summary.spec";
 
 methods {

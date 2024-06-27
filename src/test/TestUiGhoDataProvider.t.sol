@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import './TestGhoBase.t.sol';
 
-import {UiGhoDataProvider, IUiGhoDataProvider} from '../contracts/facilitators/aave/misc/UiGhoDataProvider.sol';
+import {UiGhoDataProvider, IUiGhoDataProvider} from '../contracts/facilitators/rex/misc/UiGhoDataProvider.sol';
 
 contract TestUiGhoDataProvider is TestGhoBase {
   UiGhoDataProvider dataProvider;
@@ -49,9 +49,9 @@ contract TestUiGhoDataProvider is TestGhoBase {
       'Unexpected last timestamp'
     );
     assertEq(result.ghoCurrentBorrowIndex, baseData.variableBorrowIndex, 'Unexpected borrow index');
-    assertEq(result.aaveFacilitatorBucketLevel, bucketLevel, 'Unexpected facilitator bucket level');
+    assertEq(result.rexFacilitatorBucketLevel, bucketLevel, 'Unexpected facilitator bucket level');
     assertEq(
-      result.aaveFacilitatorBucketMaxCapacity,
+      result.rexFacilitatorBucketMaxCapacity,
       bucketCapacity,
       'Unexpected facilitator bucket capacity'
     );

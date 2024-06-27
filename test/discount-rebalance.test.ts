@@ -26,7 +26,7 @@ makeSuite('Gho Discount Rebalance Flow', (testEnv: TestEnv) => {
     collateralAmount = ethers.utils.parseUnits('1000.0', 18);
     borrowAmount = ethers.utils.parseUnits('1000.0', 18);
 
-    const { users, aaveToken, stakedAave, discountRateStrategy } = testEnv;
+    const { users, rexToken, stakedAave, discountRateStrategy } = testEnv;
 
     // Fetch discount rate strategy parameters
     [discountRate, ghoDiscountedPerDiscountToken, minDiscountTokenBalance] = await Promise.all([
@@ -35,11 +35,11 @@ makeSuite('Gho Discount Rebalance Flow', (testEnv: TestEnv) => {
       discountRateStrategy.MIN_DISCOUNT_TOKEN_BALANCE(),
     ]);
 
-    // Transfers 10 stkAave (discountToken) to User 1
-    const stkAaveAmount = ethers.utils.parseUnits('10.0', 18);
+    // Transfers 10 stkRex (discountToken) to User 1
+    const stkRexAmount = ethers.utils.parseUnits('10.0', 18);
 
-    await aaveToken.connect(users[2].signer).approve(stakedAave.address, stkAaveAmount);
-    await stakedAave.connect(users[2].signer).stake(users[0].address, stkAaveAmount);
+    await rexToken.connect(users[2].signer).approve(stakedAave.address, stkRexAmount);
+    await stakedAave.connect(users[2].signer).stake(users[0].address, stkRexAmount);
   });
 
   it('User 1: Deposit WETH and Borrow GHO', async function () {

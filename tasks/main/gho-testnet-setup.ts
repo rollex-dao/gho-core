@@ -22,7 +22,7 @@ task('gho-testnet-setup', 'Deploy and Configure Gho').setAction(async (params, h
 
   /******************************************
    *              CONFIGURE GHO             *
-   * 1. Add aave as a GHO entity            *
+   * 1. Add rex as a GHO entity            *
    * 2. Add flashminter as GHO entity       *
    * 3. Set addresses in AToken and VDebt   *
    ******************************************/
@@ -38,10 +38,10 @@ task('gho-testnet-setup', 'Deploy and Configure Gho').setAction(async (params, h
   await hre.run('set-gho-addresses');
 
   /*****************************************
-   *               UPDATE StkAave          *
+   *               UPDATE StkRex          *
    ******************************************/
   blankSpace();
-  await hre.run('upgrade-stkAave');
+  await hre.run('upgrade-stkRex');
 
   /*****************************************
    *               ADD GhoSteward          *

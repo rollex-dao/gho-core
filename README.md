@@ -1,4 +1,4 @@
-[![Build pass](https://github.com/aave/gho/actions/workflows/node.js.yml/badge.svg)](https://github.com/aave/gho/actions/workflows/node.js.yml)
+[![Build pass](https://github.com/rex/gho/actions/workflows/node.js.yml/badge.svg)](https://github.com/rex/gho/actions/workflows/node.js.yml)
 
 ```
         .///.                .///.     //.            .//  `/////////////-
@@ -91,4 +91,4 @@ npm run deploy-testnet:goerli
 
 ## Connect with the community
 
-You can join the [Discord](http://aave.com/discord) channel or the [Governance Forum](https://governance.aave.com/) to ask questions about the protocol or talk about Gho with other peers.
+You can join the [Discord](http://rex.com/discord) channel or the [Governance Forum](https://governance.rex.com/) to ask questions about the protocol or talk about Gho with other peers.

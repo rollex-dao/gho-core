@@ -6,7 +6,7 @@ import {IERC3156FlashBorrower} from '@openzeppelin/contracts/interfaces/IERC3156
 import {IERC3156FlashLender} from '@openzeppelin/contracts/interfaces/IERC3156FlashLender.sol';
 import {IGhoFlashMinter} from '../munged/contracts/facilitators/flashMinter/interfaces/IGhoFlashMinter.sol';
 import {IGhoToken} from '../munged/contracts/gho/interfaces/IGhoToken.sol';
-import {IGhoAToken} from '../munged/contracts/facilitators/aave/tokens/interfaces/IGhoAToken.sol';
+import {IGhoAToken} from '../munged/contracts/facilitators/rex/tokens/interfaces/IGhoAToken.sol';
 
 contract MockFlashBorrower is IERC3156FlashBorrower {
   enum Action {

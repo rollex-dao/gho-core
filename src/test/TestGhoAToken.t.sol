@@ -206,11 +206,11 @@ contract TestGhoAToken is TestGhoBase {
 
   function testRescueToken() public {
     vm.prank(FAUCET);
-    AAVE_TOKEN.mint(address(GHO_ATOKEN), 1);
+    REX_TOKEN.mint(address(GHO_ATOKEN), 1);
 
-    GHO_ATOKEN.rescueTokens(address(AAVE_TOKEN), CHARLES, 1);
+    GHO_ATOKEN.rescueTokens(address(REX_TOKEN), CHARLES, 1);
 
-    assertEq(AAVE_TOKEN.balanceOf(CHARLES), 1, 'Token rescue should transfer 1 wei');
+    assertEq(REX_TOKEN.balanceOf(CHARLES), 1, 'Token rescue should transfer 1 wei');
   }
 
   function testRescueTokenRevertIfUnderlying() public {

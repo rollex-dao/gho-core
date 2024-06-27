@@ -23,6 +23,6 @@ fi
 # Export MARKET_NAME variable to use Aave market as testnet deployment setup
 export MARKET_NAME="Test"
 
-# Deploy stkAave in local
+# Deploy stkRex in local
 export ENABLE_REWARDS="true"
 echo "[BASH] Testnet environment ready"

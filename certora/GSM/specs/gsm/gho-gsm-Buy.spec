@@ -1,5 +1,5 @@
 import "../GsmMethods/methods_base.spec";
-import "../GsmMethods/aave_price_fee_limits.spec";
+import "../GsmMethods/rex_price_fee_limits.spec";
 
 // patch2: violated by at most 2
 // https://prover.certora.com/output/6893/cb83daf2e5cf4a929b95833e7e3e818e?anonymousKey=6adb07ee65ae6366f535ccad8379bce3784e21ca

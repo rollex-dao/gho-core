@@ -18,9 +18,9 @@ makeSuite('Initial GHO Reserve Configuration', (testEnv: TestEnv) => {
   });
 
   it('AToken proxy contract listed in Aave with correct implementation', async function () {
-    const { aaveDataProvider, gho, aTokenImplementation } = testEnv;
+    const { rexDataProvider, gho, aTokenImplementation } = testEnv;
 
-    const reserveData = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+    const reserveData = await rexDataProvider.getReserveTokensAddresses(gho.address);
     const implementationAddressAsBytes = await ethers.provider.getStorageAt(
       reserveData.aTokenAddress,
       '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc'
@@ -33,9 +33,9 @@ makeSuite('Initial GHO Reserve Configuration', (testEnv: TestEnv) => {
   });
 
   it('StableDebtToken proxy contract listed in Aave with correct implementation', async function () {
-    const { aaveDataProvider, gho, stableDebtTokenImplementation } = testEnv;
+    const { rexDataProvider, gho, stableDebtTokenImplementation } = testEnv;
 
-    const reserveData = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+    const reserveData = await rexDataProvider.getReserveTokensAddresses(gho.address);
     const implementationAddressAsBytes = await ethers.provider.getStorageAt(
       reserveData.stableDebtTokenAddress,
       '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc'
@@ -48,9 +48,9 @@ makeSuite('Initial GHO Reserve Configuration', (testEnv: TestEnv) => {
   });
 
   it('VariableDebtToken proxy contract listed in Aave with correct implementation', async function () {
-    const { aaveDataProvider, gho, variableDebtTokenImplementation } = testEnv;
+    const { rexDataProvider, gho, variableDebtTokenImplementation } = testEnv;
 
-    const reserveData = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+    const reserveData = await rexDataProvider.getReserveTokensAddresses(gho.address);
     const implementationAddressAsBytes = await ethers.provider.getStorageAt(
       reserveData.variableDebtTokenAddress,
       '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc'
@@ -105,9 +105,9 @@ makeSuite('Initial GHO Reserve Configuration', (testEnv: TestEnv) => {
   // });
 
   it('Reserve configuration data check', async function () {
-    const { aaveDataProvider, gho } = testEnv;
+    const { rexDataProvider, gho } = testEnv;
 
-    const reserverConfiguration = await aaveDataProvider.getReserveConfigurationData(gho.address);
+    const reserverConfiguration = await rexDataProvider.getReserveConfigurationData(gho.address);
 
     expect(reserverConfiguration.decimals).to.be.equal(18);
     expect(reserverConfiguration.ltv).to.be.equal(0);
@@ -122,9 +122,9 @@ makeSuite('Initial GHO Reserve Configuration', (testEnv: TestEnv) => {
   });
 
   it('Aave oracle - gho source address check', async function () {
-    const { aaveOracle, gho, ghoOracle } = testEnv;
+    const { rexOracle, gho, ghoOracle } = testEnv;
 
-    const ghoSource = await aaveOracle.getSourceOfAsset(gho.address);
+    const ghoSource = await rexOracle.getSourceOfAsset(gho.address);
 
     expect(ghoSource).to.be.equal(ghoOracle.address);
   });

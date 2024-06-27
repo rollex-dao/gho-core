@@ -1,17 +1,17 @@
 import { DeployFunction } from 'hardhat-deploy/types';
-import { StakedTokenV2Rev3__factory, STAKE_AAVE_PROXY, waitForTx } from '@aave/deploy-v3';
+import { StakedTokenV3Rev3__factory, STAKE_REX_PROXY, waitForTx } from '@pollum-io/lending-deploy';
 
 const func: DeployFunction = async function ({ getNamedAccounts, deployments, ...hre }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const [deployerSigner] = await hre.ethers.getSigners();
 
-  const stkAaveProxy = await deployments.get(STAKE_AAVE_PROXY);
-  const instance = StakedTokenV2Rev3__factory.connect(stkAaveProxy.address, deployerSigner);
+  const stkRexProxy = await deployments.get(STAKE_REX_PROXY);
+  const instance = StakedTokenV3Rev3__factory.connect(stkRexProxy.address, deployerSigner);
 
-  const stakedAaveImpl = await deploy('StakedAaveV3Impl', {
+  const stakedAaveImpl = await deploy('StakedREXV3Impl', {
     from: deployer,
-    contract: 'StakedAaveV3',
+    contract: 'StakedREXV3',
     args: [
       await instance.STAKED_TOKEN(),
       await instance.REWARD_TOKEN(),
@@ -25,7 +25,7 @@ const func: DeployFunction = async function ({ getNamedAccounts, deployments, ..
   console.log(`stakedAaveImpl Logic:         ${stakedAaveImpl.address}`);
 };
 
-func.id = 'StkAaveUpgrade';
-func.tags = ['StkAaveUpgrade', 'full_gho_deploy'];
+func.id = 'StkRexUpgrade';
+func.tags = ['StkRexUpgrade', 'full_gho_deploy'];
 
 export default func;

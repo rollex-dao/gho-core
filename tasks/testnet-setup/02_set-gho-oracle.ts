@@ -1,15 +1,15 @@
 import { task } from 'hardhat/config';
 
-import { getAaveOracle } from '@aave/deploy-v3';
+import { getAaveOracle } from '@pollum-io/lending-deploy';
 
 task('set-gho-oracle', 'Set oracle for gho in Aave Oracle').setAction(async (_, hre) => {
   const { ethers } = hre;
 
   const gho = await ethers.getContract('GhoToken');
   const ghoOracle = await ethers.getContract('GhoOracle');
-  const aaveOracle = await getAaveOracle();
+  const rexOracle = await getAaveOracle();
 
-  const setSourcesTx = await aaveOracle.setAssetSources([gho.address], [ghoOracle.address]);
+  const setSourcesTx = await rexOracle.setAssetSources([gho.address], [ghoOracle.address]);
   const setSourcesTxReceipt = await setSourcesTx.wait();
 
   const assetSourceUpdate = setSourcesTxReceipt.events?.find(

@@ -9,8 +9,8 @@ import {
   timeLatest,
 } from '../helpers/misc-utils';
 import { ONE_ADDRESS } from '../helpers/constants';
-import { ProtocolErrors } from '@aave/core-v3';
-import { evmRevert, evmSnapshot, getPoolConfiguratorProxy } from '@aave/deploy-v3';
+import { ProtocolErrors } from '@pollum-io/lending-core';
+import { evmRevert, evmSnapshot, getPoolConfiguratorProxy } from '@pollum-io/lending-deploy';
 import { BigNumber } from 'ethers';
 import { GhoInterestRateStrategy__factory } from '../types';
 
@@ -68,8 +68,8 @@ makeSuite('Gho Steward End-To-End', (testEnv: TestEnv) => {
   });
 
   it('Updates gho variable borrow rate', async function () {
-    const { ghoSteward, poolAdmin, aaveDataProvider, gho, deployer } = testEnv;
-    const oldInterestRateStrategyAddress = await aaveDataProvider.getInterestRateStrategyAddress(
+    const { ghoSteward, poolAdmin, rexDataProvider, gho, deployer } = testEnv;
+    const oldInterestRateStrategyAddress = await rexDataProvider.getInterestRateStrategyAddress(
       gho.address
     );
     const oldRate = await GhoInterestRateStrategy__factory.connect(
@@ -82,18 +82,17 @@ makeSuite('Gho Steward End-To-End', (testEnv: TestEnv) => {
       'ReserveInterestRateStrategyChanged'
     );
 
-    expect(await aaveDataProvider.getInterestRateStrategyAddress(gho.address)).not.to.be.equal(
+    expect(await rexDataProvider.getInterestRateStrategyAddress(gho.address)).not.to.be.equal(
       oldInterestRateStrategyAddress
     );
   });
 
   it('GhoSteward tries to update gho variable borrow rate without PoolAdmin role (revert expected)', async function () {
-    const { ghoSteward, poolAdmin, aclAdmin, aclManager, aaveDataProvider, deployer, gho } =
-      testEnv;
+    const { ghoSteward, poolAdmin, aclAdmin, aclManager, rexDataProvider, deployer, gho } = testEnv;
 
     const snapId = await evmSnapshot();
 
-    const oldInterestRateStrategyAddress = await aaveDataProvider.getInterestRateStrategyAddress(
+    const oldInterestRateStrategyAddress = await rexDataProvider.getInterestRateStrategyAddress(
       gho.address
     );
     const oldRate = await GhoInterestRateStrategy__factory.connect(
@@ -157,9 +156,9 @@ makeSuite('Gho Steward End-To-End', (testEnv: TestEnv) => {
   });
 
   it('RiskCouncil updates both parameters, steward expires, expiration time extends, more updates', async function () {
-    const { ghoSteward, poolAdmin, gho, aToken, aaveDataProvider, deployer } = testEnv;
+    const { ghoSteward, poolAdmin, gho, aToken, rexDataProvider, deployer } = testEnv;
 
-    const oldInterestRateStrategyAddress = await aaveDataProvider.getInterestRateStrategyAddress(
+    const oldInterestRateStrategyAddress = await rexDataProvider.getInterestRateStrategyAddress(
       gho.address
     );
     const oldRate = await GhoInterestRateStrategy__factory.connect(

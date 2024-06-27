@@ -1,2 +1,2 @@
-import "aave_price_limits.spec";
-import "aave_fee_limits.spec";
+import "rex_price_limits.spec";
+import "rex_fee_limits.spec";

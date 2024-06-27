@@ -16,7 +16,7 @@ import {
   GhoStableDebtToken,
   Pool,
   IERC20,
-  StakedAaveV3,
+  StakedREXV3,
   MintableERC20,
   GhoFlashMinter,
   GhoSteward,
@@ -28,7 +28,7 @@ import {
   getGhoToken,
   getGhoAToken,
   getGhoVariableDebtToken,
-  getStakedAave,
+  getStakedREX,
   getMintableErc20,
   getGhoFlashMinter,
   getGhoSteward,
@@ -44,9 +44,9 @@ import {
   getFaucet,
   getMintableERC20,
   getTestnetReserveAddressFromSymbol,
-  STAKE_AAVE_PROXY,
+  STAKE_REX_PROXY,
   TREASURY_PROXY_ID,
-} from '@aave/deploy-v3';
+} from '@pollum-io/lending-deploy';
 
 declare var hre: HardhatRuntimeEnvironment;
 
@@ -60,7 +60,7 @@ export interface TestEnv {
   poolAdmin: SignerWithAddress;
   emergencyAdmin: SignerWithAddress;
   riskAdmin: SignerWithAddress;
-  stkAaveWhale: SignerWithAddress;
+  stkRexWhale: SignerWithAddress;
   aclAdmin: SignerWithAddress;
   users: SignerWithAddress[];
   gho: GhoToken;
@@ -76,13 +76,13 @@ export interface TestEnv {
   discountRateStrategy: GhoDiscountRateStrategy;
   pool: Pool;
   aclManager: ACLManager;
-  stakedAave: StakedAaveV3;
-  aaveDataProvider: AaveProtocolDataProvider;
-  aaveOracle: AaveOracle;
+  stakedAave: StakedREXV3;
+  rexDataProvider: AaveProtocolDataProvider;
+  rexOracle: AaveOracle;
   treasuryAddress: tEthereumAddress;
   weth: MintableERC20;
   usdc: MintableERC20;
-  aaveToken: IERC20;
+  rexToken: IERC20;
   flashMinter: GhoFlashMinter;
   faucetOwner: Faucet;
   ghoSteward: GhoSteward;
@@ -98,7 +98,7 @@ const testEnv: TestEnv = {
   poolAdmin: {} as SignerWithAddress,
   emergencyAdmin: {} as SignerWithAddress,
   riskAdmin: {} as SignerWithAddress,
-  stkAaveWhale: {} as SignerWithAddress,
+  stkRexWhale: {} as SignerWithAddress,
   aclAdmin: {} as SignerWithAddress,
   users: [] as SignerWithAddress[],
   gho: {} as GhoToken,
@@ -114,13 +114,13 @@ const testEnv: TestEnv = {
   discountRateStrategy: {} as GhoDiscountRateStrategy,
   pool: {} as Pool,
   aclManager: {} as ACLManager,
-  stakedAave: {} as StakedAaveV3,
-  aaveDataProvider: {} as AaveProtocolDataProvider,
-  aaveOracle: {} as AaveOracle,
+  stakedAave: {} as StakedREXV3,
+  rexDataProvider: {} as AaveProtocolDataProvider,
+  rexOracle: {} as AaveOracle,
   treasuryAddress: {} as tEthereumAddress,
   weth: {} as MintableERC20,
   usdc: {} as MintableERC20,
-  aaveToken: {} as IERC20,
+  rexToken: {} as IERC20,
   flashMinter: {} as GhoFlashMinter,
   faucetOwner: {} as Faucet,
   ghoSteward: {} as GhoSteward,
@@ -153,11 +153,11 @@ export async function initializeMakeSuite() {
   testEnv.ghoOracle = await getGhoOracle();
 
   testEnv.pool = await getPool();
-  testEnv.aaveDataProvider = await getAaveProtocolDataProvider();
+  testEnv.rexDataProvider = await getAaveProtocolDataProvider();
 
   testEnv.aclManager = await getACLManager();
 
-  const tokenProxyAddresses = await testEnv.aaveDataProvider.getReserveTokensAddresses(
+  const tokenProxyAddresses = await testEnv.rexDataProvider.getReserveTokensAddresses(
     testEnv.gho.address
   );
   testEnv.aToken = await getGhoAToken(tokenProxyAddresses.aTokenAddress);
@@ -174,14 +174,14 @@ export async function initializeMakeSuite() {
 
   testEnv.interestRateStrategy = await getGhoInterestRateStrategy();
   testEnv.discountRateStrategy = await getGhoDiscountRateStrategy();
-  testEnv.aaveOracle = await getAaveOracle();
+  testEnv.rexOracle = await getAaveOracle();
 
   testEnv.treasuryAddress = (await hre.deployments.get(TREASURY_PROXY_ID)).address;
 
   testEnv.faucetOwner = await getFaucet();
   testEnv.weth = await getMintableERC20(await getTestnetReserveAddressFromSymbol('WETH'));
   testEnv.usdc = await getMintableERC20(await getTestnetReserveAddressFromSymbol('USDC'));
-  testEnv.aaveToken = await getMintableErc20(await getTestnetReserveAddressFromSymbol('AAVE'));
+  testEnv.rexToken = await getMintableErc20(await getTestnetReserveAddressFromSymbol('REX'));
 
   const userAddresses = testEnv.users.map((u) => u.address);
 
@@ -201,14 +201,14 @@ export async function initializeMakeSuite() {
 
   await mintErc20(
     testEnv.faucetOwner,
-    testEnv.aaveToken.address,
+    testEnv.rexToken.address,
     userAddresses,
     hre.ethers.utils.parseUnits('10.0', 18)
   );
 
-  testEnv.stakedAave = await getStakedAave(
+  testEnv.stakedAave = await getStakedREX(
     await (
-      await hre.deployments.get(STAKE_AAVE_PROXY)
+      await hre.deployments.get(STAKE_REX_PROXY)
     ).address
   );
 

@@ -9,7 +9,7 @@ import { calcCompoundedInterest, calcDiscountRate } from './helpers/math/calcula
 import { getTxCostAndTimestamp } from './helpers/helpers';
 import './helpers/math/wadraymath';
 
-makeSuite('Gho StkAave Transfer', (testEnv: TestEnv) => {
+makeSuite('Gho StkRex Transfer', (testEnv: TestEnv) => {
   let ethers;
 
   let collateralAmount;
@@ -37,18 +37,18 @@ makeSuite('Gho StkAave Transfer', (testEnv: TestEnv) => {
     ]);
   });
 
-  it('Transfer stkAAVE to borrower of GHO', async function () {
+  it('Transfer stkREX to borrower of GHO', async function () {
     const snapId = await evmSnapshot();
 
     // setup
     const { users, pool, weth, gho, variableDebtToken } = testEnv;
 
-    const { aaveToken, stakedAave, stkAaveWhale } = testEnv;
-    const stkAaveAmount = ethers.utils.parseUnits('10.0', 18);
-    await aaveToken.connect(users[2].signer).approve(stakedAave.address, stkAaveAmount);
-    await stakedAave.connect(users[2].signer).stake(users[2].address, stkAaveAmount);
+    const { rexToken, stakedAave, stkRexWhale } = testEnv;
+    const stkRexAmount = ethers.utils.parseUnits('10.0', 18);
+    await rexToken.connect(users[2].signer).approve(stakedAave.address, stkRexAmount);
+    await stakedAave.connect(users[2].signer).stake(users[2].address, stkRexAmount);
 
-    await stakedAave.connect(users[2].signer).transfer(users[1].address, stkAaveAmount);
+    await stakedAave.connect(users[2].signer).transfer(users[1].address, stkRexAmount);
 
     await weth.connect(users[2].signer).approve(pool.address, collateralAmount);
     await pool
@@ -58,7 +58,7 @@ makeSuite('Gho StkAave Transfer', (testEnv: TestEnv) => {
 
     const debtBalanceBefore = await variableDebtToken.balanceOf(users[2].address);
 
-    await expect(stakedAave.connect(users[1].signer).transfer(users[2].address, stkAaveAmount)).to
+    await expect(stakedAave.connect(users[1].signer).transfer(users[2].address, stkRexAmount)).to
       .not.be.reverted;
 
     const debtBalanceAfter = await variableDebtToken.balanceOf(users[2].address);
@@ -67,16 +67,16 @@ makeSuite('Gho StkAave Transfer', (testEnv: TestEnv) => {
     await evmRevert(snapId);
   });
 
-  it('Transfer from user with stkAave and GHO to user without GHO', async function () {
+  it('Transfer from user with stkRex and GHO to user without GHO', async function () {
     // setup
     const { users, pool, weth, gho, variableDebtToken } = testEnv;
 
-    const { aaveToken, stakedAave, stkAaveWhale } = testEnv;
-    const stkAaveAmount = ethers.utils.parseUnits('10.0', 18);
-    await aaveToken.connect(users[2].signer).approve(stakedAave.address, stkAaveAmount);
-    await stakedAave.connect(users[2].signer).stake(users[2].address, stkAaveAmount);
+    const { rexToken, stakedAave, stkRexWhale } = testEnv;
+    const stkRexAmount = ethers.utils.parseUnits('10.0', 18);
+    await rexToken.connect(users[2].signer).approve(stakedAave.address, stkRexAmount);
+    await stakedAave.connect(users[2].signer).stake(users[2].address, stkRexAmount);
 
-    // await stakedAave.connect(stkAaveWhale.signer).transfer(users[2].address, stkAaveAmount);
+    // await stakedAave.connect(stkRexWhale.signer).transfer(users[2].address, stkRexAmount);
 
     await weth.connect(users[2].signer).approve(pool.address, collateralAmount);
     await pool
@@ -98,7 +98,7 @@ makeSuite('Gho StkAave Transfer', (testEnv: TestEnv) => {
     expect(await variableDebtToken.getBalanceFromInterest(users[1].address)).to.be.eq(0);
 
     // calculate expected results
-    tx = await stakedAave.connect(users[2].signer).transfer(users[1].address, stkAaveAmount);
+    tx = await stakedAave.connect(users[2].signer).transfer(users[1].address, stkRexAmount);
     rcpt = await tx.wait();
     const { txTimestamp } = await getTxCostAndTimestamp(rcpt);
     const multiplier = calcCompoundedInterest(

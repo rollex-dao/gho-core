@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {InitializableImmutableAdminUpgradeabilityProxy} from '@aave/core-v3/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol';
+import {InitializableImmutableAdminUpgradeabilityProxy} from '@pollum-io/lending-core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol';
 import './TestGhoBase.t.sol';
 
 contract TestGhoVariableDebtTokenForked is TestGhoBase {
   IGhoToken gho = IGhoToken(0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f);
   address usdc = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-  address aave = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
-  address stkAave = 0x4da27a545c0c5B758a6BA100e3a049001de870f5;
+  address rex = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
+  address stkRex = 0x4da27a545c0c5B758a6BA100e3a049001de870f5;
   InitializableImmutableAdminUpgradeabilityProxy debtToken =
     InitializableImmutableAdminUpgradeabilityProxy(
       payable(0x786dBff3f1292ae8F92ea68Cf93c30b34B1ed04B)
@@ -18,7 +18,7 @@ contract TestGhoVariableDebtTokenForked is TestGhoBase {
 
   uint256 usdcSupplyAmount = 100_000e6;
   uint256 ghoBorrowAmount = 71_000e18;
-  uint256 stkAaveAmount = 100_000e18;
+  uint256 stkRexAmount = 100_000e18;
 
   function setUp() public {
     vm.createSelectFork(vm.envString('ETH_RPC_URL'), 17987863);
@@ -27,11 +27,11 @@ contract TestGhoVariableDebtTokenForked is TestGhoBase {
   function testBorrowAndRepayFullUnexpectedScaledBalance() public {
     uint256 timeSkip = 86545113;
 
-    // Stake AAVE
-    deal(aave, ALICE, stkAaveAmount);
+    // Stake REX
+    deal(rex, ALICE, stkRexAmount);
     vm.startPrank(ALICE);
-    IERC20(aave).approve(stkAave, stkAaveAmount);
-    IStakedAaveV3(stkAave).stake(ALICE, stkAaveAmount);
+    IERC20(rex).approve(stkRex, stkRexAmount);
+    IStakedRexV3(stkRex).stake(ALICE, stkRexAmount);
     vm.stopPrank();
 
     // Supply USDC, borrow GHO
@@ -66,11 +66,11 @@ contract TestGhoVariableDebtTokenForked is TestGhoBase {
     timeSkip = bound(timeSkip, 1, 31_560_000);
     address newDebtToken = address(new GhoVariableDebtToken(pool));
 
-    // Stake AAVE
-    deal(aave, ALICE, stkAaveAmount);
+    // Stake REX
+    deal(rex, ALICE, stkRexAmount);
     vm.startPrank(ALICE);
-    IERC20(aave).approve(stkAave, stkAaveAmount);
-    IStakedAaveV3(stkAave).stake(ALICE, stkAaveAmount);
+    IERC20(rex).approve(stkRex, stkRexAmount);
+    IStakedRexV3(stkRex).stake(ALICE, stkRexAmount);
     vm.stopPrank();
 
     // Supply USDC, borrow GHO

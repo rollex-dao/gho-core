@@ -21,7 +21,7 @@ import {
   PoolConfigurator,
   StableDebtToken,
   VariableDebtToken,
-  StakedAaveV3,
+  StakedREXV3,
   GhoFlashMinter,
   GhoSteward,
   GhoStableDebtToken,
@@ -88,7 +88,7 @@ export const getBaseImmutableAdminUpgradeabilityProxy = async (
 
 export const getERC20 = async (address: tEthereumAddress): Promise<IERC20> =>
   getContract(
-    '@aave/core-v3/contracts/dependencies/openzeppelin/contracts/IERC20.sol:IERC20',
+    '@pollum-io/lending-core/contracts/dependencies/openzeppelin/contracts/IERC20.sol:IERC20',
     address
   );
 
@@ -120,13 +120,10 @@ export const getVariableDebtToken = async (
 export const getStableDebtToken = async (address?: tEthereumAddress): Promise<StableDebtToken> =>
   getContract('StableDebtToken', address || (await hre.deployments.get('StableDebtToken')).address);
 
-export const getStakedAave = async (address?: tEthereumAddress): Promise<StakedAaveV3> => {
+export const getStakedREX = async (address?: tEthereumAddress): Promise<StakedREXV3> => {
   return (
-    await getContract(
-      'StakedAaveV3',
-      address || (await hre.deployments.get('StakedAaveV3')).address
-    )
-  ).connect((await hre.ethers.getSigners())[2]) as StakedAaveV3;
+    await getContract('StakedREXV3', address || (await hre.deployments.get('StakedREXV3')).address)
+  ).connect((await hre.ethers.getSigners())[2]) as StakedREXV3;
 };
 
 export const getMintableErc20 = async (address?: tEthereumAddress): Promise<MintableERC20> =>

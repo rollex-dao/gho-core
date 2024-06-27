@@ -1,6 +1,6 @@
 import "../GsmMethods/methods_base-Martin.spec";
 import "../GsmMethods/methods_divint_summary.spec";
-import "../GsmMethods/aave_price_fee_limits.spec";
+import "../GsmMethods/rex_price_fee_limits.spec";
 
 /**
  *

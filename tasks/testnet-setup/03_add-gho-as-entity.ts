@@ -1,16 +1,16 @@
 import { task } from 'hardhat/config';
 
 import { ghoEntityConfig } from '../../helpers/config';
-import { getAaveProtocolDataProvider } from '@aave/deploy-v3';
+import { getAaveProtocolDataProvider } from '@pollum-io/lending-deploy';
 import { GhoToken } from '../../types';
 
 task('add-gho-as-entity', 'Adds Aave as a gho entity').setAction(async (_, hre) => {
   const { ethers } = hre;
 
   const gho = (await ethers.getContract('GhoToken')) as GhoToken;
-  const aaveDataProvider = await getAaveProtocolDataProvider();
+  const rexDataProvider = await getAaveProtocolDataProvider();
 
-  const tokenProxyAddresses = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+  const tokenProxyAddresses = await rexDataProvider.getReserveTokensAddresses(gho.address);
 
   const [deployer] = await hre.ethers.getSigners();
 

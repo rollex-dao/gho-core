@@ -29,7 +29,7 @@ makeSuite('Gho Discount Borrow Flow', (testEnv: TestEnv) => {
     collateralAmount = ethers.utils.parseUnits('1000.0', 18);
     borrowAmount = ethers.utils.parseUnits('1000.0', 18);
 
-    const { users, aaveToken, stakedAave, discountRateStrategy, faucetOwner } = testEnv;
+    const { users, rexToken, stakedAave, discountRateStrategy, faucetOwner } = testEnv;
 
     // Fetch discount rate strategy parameters
     [discountRate, ghoDiscountedPerDiscountToken, minDiscountTokenBalance] = await Promise.all([
@@ -38,12 +38,12 @@ makeSuite('Gho Discount Borrow Flow', (testEnv: TestEnv) => {
       discountRateStrategy.MIN_DISCOUNT_TOKEN_BALANCE(),
     ]);
 
-    // Transfers 10 stkAave (discountToken) to User 2
-    const stkAaveAmount = ethers.utils.parseUnits('10.0', 18);
+    // Transfers 10 stkRex (discountToken) to User 2
+    const stkRexAmount = ethers.utils.parseUnits('10.0', 18);
     const approveAaveAmount = ethers.utils.parseUnits('1000.0', 18);
 
-    await aaveToken.connect(users[1].signer).approve(stakedAave.address, approveAaveAmount);
-    await stakedAave.connect(users[1].signer).stake(users[1].address, stkAaveAmount);
+    await rexToken.connect(users[1].signer).approve(stakedAave.address, approveAaveAmount);
+    await stakedAave.connect(users[1].signer).stake(users[1].address, stkRexAmount);
   });
 
   it('User 1: Deposit WETH and Borrow GHO', async function () {

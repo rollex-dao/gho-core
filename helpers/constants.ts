@@ -28,7 +28,7 @@ export const ONE_ADDRESS = '0x0000000000000000000000000000000000000001';
 // ----------------
 export const MOCK_USD_PRICE_IN_WEI = '5848466240000000';
 export const USD_ADDRESS = '0x10F7Fc1F91Ba351f9C629c5947AD69bD03C05b96';
-export const AAVE_REFERRAL = '0';
+export const REX_REFERRAL = '0';
 
 export const TEST_SNAPSHOT_ID = '0x1';
 export const HARDHAT_CHAINID = 31337;

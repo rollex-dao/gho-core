@@ -15,8 +15,8 @@ interface IUiGhoDataProvider {
     uint256 ghoMinDiscountTokenBalanceForDiscount;
     uint40 ghoReserveLastUpdateTimestamp;
     uint128 ghoCurrentBorrowIndex;
-    uint256 aaveFacilitatorBucketLevel;
-    uint256 aaveFacilitatorBucketMaxCapacity;
+    uint256 rexFacilitatorBucketLevel;
+    uint256 rexFacilitatorBucketMaxCapacity;
   }
 
   struct GhoUserData {

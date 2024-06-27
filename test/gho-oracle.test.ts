@@ -29,8 +29,8 @@ makeSuite('AaveOracle', (testEnv: TestEnv) => {
   });
 
   it('Check price of GHO via AaveOracle', async () => {
-    const { aaveOracle, gho } = testEnv;
+    const { rexOracle, gho } = testEnv;
 
-    expect(await aaveOracle.getAssetPrice(gho.address)).to.equal(ghoPrice);
+    expect(await rexOracle.getAssetPrice(gho.address)).to.equal(ghoPrice);
   });
 });

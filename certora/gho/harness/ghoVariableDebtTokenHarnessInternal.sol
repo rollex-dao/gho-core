@@ -1,8 +1,8 @@
 pragma solidity 0.8.10;
 
 import {GhoVariableDebtTokenHarness} from './ghoVariableDebtTokenHarness.sol';
-import {GhoVariableDebtToken} from '../munged/contracts/facilitators/aave/tokens/GhoVariableDebtToken.sol';
-import {IPool} from '@aave/core-v3/contracts/interfaces/IPool.sol';
+import {GhoVariableDebtToken} from '../munged/contracts/facilitators/rex/tokens/GhoVariableDebtToken.sol';
+import {IPool} from '@pollum-io/lending-core/contracts/interfaces/IPool.sol';
 
 contract GhoVariableDebtTokenHarnessInternal is GhoVariableDebtTokenHarness {
   constructor(IPool pool) public GhoVariableDebtTokenHarness(pool) {

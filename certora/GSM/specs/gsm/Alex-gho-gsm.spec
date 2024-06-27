@@ -1,6 +1,6 @@
 import "../GsmMethods/methods_base.spec";
 import "../GsmMethods/methods_divint_summary.spec";
-import "../GsmMethods/aave_price_fee_limits_strict.spec";
+import "../GsmMethods/rex_price_fee_limits_strict.spec";
 
 
 // @title solvency rule: (ghoBacked + 1>= ghoMinted) – (insolvency, rescue more funds than should, allocate more funds to allocator) - buyAsset Function

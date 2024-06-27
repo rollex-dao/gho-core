@@ -1,10 +1,10 @@
 import { task } from 'hardhat/config';
 import {
-  STAKE_AAVE_PROXY,
+  STAKE_REX_PROXY,
   TREASURY_PROXY_ID,
   getAaveProtocolDataProvider,
   waitForTx,
-} from '@aave/deploy-v3';
+} from '@pollum-io/lending-deploy';
 import { GhoToken } from '../../../types/src/contracts/gho/GhoToken';
 import { ghoReserveConfig } from '../../helpers/config';
 import {
@@ -19,13 +19,13 @@ task(
 ).setAction(async (_, hre) => {
   const { ethers } = hre;
 
-  const stkAave = await (await hre.deployments.get(STAKE_AAVE_PROXY)).address;
+  const stkRex = await (await hre.deployments.get(STAKE_REX_PROXY)).address;
 
   const gho = (await ethers.getContract('GhoToken')) as GhoToken;
-  const aaveDataProvider = await getAaveProtocolDataProvider();
+  const rexDataProvider = await getAaveProtocolDataProvider();
   const treasuryAddress = await (await hre.deployments.get(TREASURY_PROXY_ID)).address;
   const discountRateStrategy = await getGhoDiscountRateStrategy();
-  const tokenProxyAddresses = await aaveDataProvider.getReserveTokensAddresses(gho.address);
+  const tokenProxyAddresses = await rexDataProvider.getReserveTokensAddresses(gho.address);
   const ghoAToken = await getGhoAToken(tokenProxyAddresses.aTokenAddress);
   const ghoVariableDebtToken = await getGhoVariableDebtToken(
     tokenProxyAddresses.variableDebtTokenAddress
@@ -63,9 +63,9 @@ task(
 
   // Set discount token
   const updateDiscountTokenTxReceipt = await waitForTx(
-    await ghoVariableDebtToken.updateDiscountToken(stkAave)
+    await ghoVariableDebtToken.updateDiscountToken(stkRex)
   );
   console.log(
-    `VariableDebtToken discount token set to:  ${stkAave} in tx: ${updateDiscountTokenTxReceipt.transactionHash}`
+    `VariableDebtToken discount token set to:  ${stkRex} in tx: ${updateDiscountTokenTxReceipt.transactionHash}`
   );
 });

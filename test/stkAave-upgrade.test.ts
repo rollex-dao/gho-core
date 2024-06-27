@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { advanceTimeAndBlock } from '../helpers/misc-utils';
 import { makeSuite, TestEnv } from './helpers/make-suite';
 
-makeSuite('Check upgraded stkAave', (testEnv: TestEnv) => {
+makeSuite('Check upgraded stkRex', (testEnv: TestEnv) => {
   let ethers;
 
   let amountTransferred;
@@ -31,18 +31,18 @@ makeSuite('Check upgraded stkAave', (testEnv: TestEnv) => {
     expect(ghoDebtToken).to.be.equal(variableDebtToken.address);
   });
 
-  it('Users should be able to stake AAVE', async () => {
-    const { stakedAave, aaveToken, users } = testEnv;
+  it('Users should be able to stake REX', async () => {
+    const { stakedAave, rexToken, users } = testEnv;
     const amount = ethers.utils.parseUnits('1.0', 18);
     const approveAmount = ethers.utils.parseUnits('1.0', 18);
-    await aaveToken.connect(users[2].signer).approve(stakedAave.address, approveAmount);
+    await rexToken.connect(users[2].signer).approve(stakedAave.address, approveAmount);
 
     await expect(stakedAave.connect(users[2].signer).stake(users[2].address, amount))
       .to.emit(stakedAave, 'Staked')
       .withArgs(users[2].address, users[2].address, amount, amount);
   });
 
-  it('Users should be able to redeem stkAave', async () => {
+  it('Users should be able to redeem stkRex', async () => {
     const { stakedAave, users } = testEnv;
     const amount = ethers.utils.parseUnits('1.0', 18);
 

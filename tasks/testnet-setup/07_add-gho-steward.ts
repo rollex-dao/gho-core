@@ -1,6 +1,6 @@
 import { task } from 'hardhat/config';
-import { getACLManager } from '@aave/deploy-v3';
-import { GhoSteward } from '../../../types/src/contracts/facilitators/aave/misc/GhoSteward';
+import { getACLManager } from '@pollum-io/lending-deploy';
+import { GhoSteward } from '../../../types/src/contracts/facilitators/rex/misc/GhoSteward';
 import { getGhoToken } from '../../helpers/contract-getters';
 import { ethers } from 'ethers';
 

@@ -11,11 +11,11 @@ import {Events} from './helpers/Events.sol';
 import {AccessControlErrorsLib, OwnableErrorsLib} from './helpers/ErrorsLib.sol';
 
 // generic libs
-import {DataTypes} from '@aave/core-v3/contracts/protocol/libraries/types/DataTypes.sol';
-import {Errors} from '@aave/core-v3/contracts/protocol/libraries/helpers/Errors.sol';
-import {PercentageMath} from '@aave/core-v3/contracts/protocol/libraries/math/PercentageMath.sol';
-import {SafeCast} from '@aave/core-v3/contracts/dependencies/openzeppelin/contracts/SafeCast.sol';
-import {WadRayMath} from '@aave/core-v3/contracts/protocol/libraries/math/WadRayMath.sol';
+import {DataTypes} from '@pollum-io/lending-core/contracts/protocol/libraries/types/DataTypes.sol';
+import {Errors} from '@pollum-io/lending-core/contracts/protocol/libraries/helpers/Errors.sol';
+import {PercentageMath} from '@pollum-io/lending-core/contracts/protocol/libraries/math/PercentageMath.sol';
+import {SafeCast} from '@pollum-io/lending-core/contracts/dependencies/openzeppelin/contracts/SafeCast.sol';
+import {WadRayMath} from '@pollum-io/lending-core/contracts/protocol/libraries/math/WadRayMath.sol';
 
 // mocks
 import {MockAclManager} from './mocks/MockAclManager.sol';
@@ -26,46 +26,46 @@ import {MockPool} from './mocks/MockPool.sol';
 import {MockAddressesProvider} from './mocks/MockAddressesProvider.sol';
 import {MockERC4626} from './mocks/MockERC4626.sol';
 import {MockUpgradeable} from './mocks/MockUpgradeable.sol';
-import {PriceOracle} from '@aave/core-v3/contracts/mocks/oracle/PriceOracle.sol';
-import {TestnetERC20} from '@aave/periphery-v3/contracts/mocks/testnet-helpers/TestnetERC20.sol';
-import {WETH9Mock} from '@aave/periphery-v3/contracts/mocks/WETH9Mock.sol';
+import {PriceOracle} from '@pollum-io/lending-core/contracts/mocks/oracle/PriceOracle.sol';
+import {TestnetERC20} from '@pollum-io/lending-periphery/contracts/mocks/testnet-helpers/TestnetERC20.sol';
+import {WETH9Mock} from '@pollum-io/lending-periphery/contracts/mocks/WETH9Mock.sol';
 
 // interfaces
-import {IAaveIncentivesController} from '@aave/core-v3/contracts/interfaces/IAaveIncentivesController.sol';
-import {IAToken} from '@aave/core-v3/contracts/interfaces/IAToken.sol';
-import {IERC20} from 'aave-stk-v1-5/src/interfaces/IERC20.sol';
+import {IAaveIncentivesController} from '@pollum-io/lending-core/contracts/interfaces/IAaveIncentivesController.sol';
+import {IAToken} from '@pollum-io/lending-core/contracts/interfaces/IAToken.sol';
+import {IERC20} from '@pollum-io/rollex-staking-module/src/interfaces/IERC20.sol';
 import {IERC3156FlashBorrower} from '@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol';
 import {IERC3156FlashLender} from '@openzeppelin/contracts/interfaces/IERC3156FlashLender.sol';
 import {IERC4626} from '@openzeppelin/contracts/interfaces/IERC4626.sol';
 import {IGhoToken} from '../contracts/gho/interfaces/IGhoToken.sol';
-import {IGhoVariableDebtTokenTransferHook} from 'aave-stk-v1-5/src/interfaces/IGhoVariableDebtTokenTransferHook.sol';
-import {IPool} from '@aave/core-v3/contracts/interfaces/IPool.sol';
-import {IPoolAddressesProvider} from '@aave/core-v3/contracts/interfaces/IPoolAddressesProvider.sol';
-import {IStakedAaveV3} from 'aave-stk-v1-5/src/interfaces/IStakedAaveV3.sol';
-import {IFixedRateStrategyFactory} from '../contracts/facilitators/aave/interestStrategy/interfaces/IFixedRateStrategyFactory.sol';
+import {IGhoVariableDebtTokenTransferHook} from '@pollum-io/rollex-staking-module/src/interfaces/IGhoVariableDebtTokenTransferHook.sol';
+import {IPool} from '@pollum-io/lending-core/contracts/interfaces/IPool.sol';
+import {IPoolAddressesProvider} from '@pollum-io/lending-core/contracts/interfaces/IPoolAddressesProvider.sol';
+import {IStakedRexV3} from '@pollum-io/rollex-staking-module/src/interfaces/IStakedRexV3.sol';
+import {IFixedRateStrategyFactory} from '../contracts/facilitators/rex/interestStrategy/interfaces/IFixedRateStrategyFactory.sol';
 
 // non-GHO contracts
-import {AdminUpgradeabilityProxy} from '@aave/core-v3/contracts/dependencies/openzeppelin/upgradeability/AdminUpgradeabilityProxy.sol';
-import {ERC20} from '@aave/core-v3/contracts/dependencies/openzeppelin/contracts/ERC20.sol';
-import {StakedAaveV3} from 'aave-stk-v1-5/src/contracts/StakedAaveV3.sol';
-import {ReserveConfiguration} from '@aave/core-v3/contracts/protocol/libraries/configuration/ReserveConfiguration.sol';
+import {AdminUpgradeabilityProxy} from '@pollum-io/lending-core/contracts/dependencies/openzeppelin/upgradeability/AdminUpgradeabilityProxy.sol';
+import {ERC20} from '@pollum-io/lending-core/contracts/dependencies/openzeppelin/contracts/ERC20.sol';
+import {StakedRexV3} from '@pollum-io/rollex-staking-module/src/contracts/StakedRexV3.sol';
+import {ReserveConfiguration} from '@pollum-io/lending-core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol';
 import {TransparentUpgradeableProxy} from 'solidity-utils/contracts/transparent-proxy/TransparentUpgradeableProxy.sol';
 
 // GHO contracts
-import {GhoAToken} from '../contracts/facilitators/aave/tokens/GhoAToken.sol';
-import {GhoDiscountRateStrategy} from '../contracts/facilitators/aave/interestStrategy/GhoDiscountRateStrategy.sol';
+import {GhoAToken} from '../contracts/facilitators/rex/tokens/GhoAToken.sol';
+import {GhoDiscountRateStrategy} from '../contracts/facilitators/rex/interestStrategy/GhoDiscountRateStrategy.sol';
 import {GhoFlashMinter} from '../contracts/facilitators/flashMinter/GhoFlashMinter.sol';
-import {GhoInterestRateStrategy} from '../contracts/facilitators/aave/interestStrategy/GhoInterestRateStrategy.sol';
+import {GhoInterestRateStrategy} from '../contracts/facilitators/rex/interestStrategy/GhoInterestRateStrategy.sol';
 import {GhoSteward} from '../contracts/misc/GhoSteward.sol';
 import {IGhoSteward} from '../contracts/misc/interfaces/IGhoSteward.sol';
 import {IGhoStewardV2} from '../contracts/misc/interfaces/IGhoStewardV2.sol';
-import {GhoOracle} from '../contracts/facilitators/aave/oracle/GhoOracle.sol';
-import {GhoStableDebtToken} from '../contracts/facilitators/aave/tokens/GhoStableDebtToken.sol';
+import {GhoOracle} from '../contracts/facilitators/rex/oracle/GhoOracle.sol';
+import {GhoStableDebtToken} from '../contracts/facilitators/rex/tokens/GhoStableDebtToken.sol';
 import {GhoToken} from '../contracts/gho/GhoToken.sol';
 import {UpgradeableGhoToken} from '../contracts/gho/UpgradeableGhoToken.sol';
-import {GhoVariableDebtToken} from '../contracts/facilitators/aave/tokens/GhoVariableDebtToken.sol';
+import {GhoVariableDebtToken} from '../contracts/facilitators/rex/tokens/GhoVariableDebtToken.sol';
 import {GhoStewardV2} from '../contracts/misc/GhoStewardV2.sol';
-import {FixedRateStrategyFactory} from '../contracts/facilitators/aave/interestStrategy/FixedRateStrategyFactory.sol';
+import {FixedRateStrategyFactory} from '../contracts/facilitators/rex/interestStrategy/FixedRateStrategyFactory.sol';
 
 // GSM contracts
 import {IGsm} from '../contracts/facilitators/gsm/interfaces/IGsm.sol';
@@ -99,8 +99,8 @@ contract TestGhoBase is Test, Constants, Events {
   }
 
   GhoToken GHO_TOKEN;
-  TestnetERC20 AAVE_TOKEN;
-  IStakedAaveV3 STK_TOKEN;
+  TestnetERC20 REX_TOKEN;
+  IStakedRexV3 STK_TOKEN;
   TestnetERC20 USDC_TOKEN;
   MockERC4626 USDC_4626_TOKEN;
   MockPool POOL;
@@ -151,28 +151,28 @@ contract TestGhoBase is Test, Constants, Events {
     GHO_TOKEN = new GhoToken(address(this));
     GHO_TOKEN.grantRole(GHO_TOKEN_FACILITATOR_MANAGER_ROLE, address(this));
     GHO_TOKEN.grantRole(GHO_TOKEN_BUCKET_MANAGER_ROLE, address(this));
-    AAVE_TOKEN = new TestnetERC20('AAVE', 'AAVE', 18, FAUCET);
-    StakedAaveV3 stkAave = new StakedAaveV3(
-      IERC20(address(AAVE_TOKEN)),
-      IERC20(address(AAVE_TOKEN)),
+    REX_TOKEN = new TestnetERC20('REX', 'REX', 18, FAUCET);
+    StakedRexV3 stkRex = new StakedRexV3(
+      IERC20(address(REX_TOKEN)),
+      IERC20(address(REX_TOKEN)),
       1,
       address(0),
       address(0),
       1
     );
-    AdminUpgradeabilityProxy stkAaveProxy = new AdminUpgradeabilityProxy(
-      address(stkAave),
-      STKAAVE_PROXY_ADMIN,
+    AdminUpgradeabilityProxy stkRexProxy = new AdminUpgradeabilityProxy(
+      address(stkRex),
+      STKREX_PROXY_ADMIN,
       ''
     );
-    StakedAaveV3(address(stkAaveProxy)).initialize(
-      STKAAVE_PROXY_ADMIN,
-      STKAAVE_PROXY_ADMIN,
-      STKAAVE_PROXY_ADMIN,
+    StakedRexV3(address(stkRexProxy)).initialize(
+      STKREX_PROXY_ADMIN,
+      STKREX_PROXY_ADMIN,
+      STKREX_PROXY_ADMIN,
       0,
       1
     );
-    STK_TOKEN = IStakedAaveV3(address(stkAaveProxy));
+    STK_TOKEN = IStakedRexV3(address(stkRexProxy));
     USDC_TOKEN = new TestnetERC20('USD Coin', 'USDC', 6, FAUCET);
     USDC_4626_TOKEN = new MockERC4626('USD Coin 4626', '4626', address(USDC_TOKEN));
     address ghoTokenAddress = address(GHO_TOKEN);
@@ -487,10 +487,10 @@ contract TestGhoBase is Test, Constants, Events {
 
   function mintAndStakeDiscountToken(address user, uint256 amount) public {
     vm.prank(FAUCET);
-    AAVE_TOKEN.mint(user, amount);
+    REX_TOKEN.mint(user, amount);
 
     vm.startPrank(user);
-    AAVE_TOKEN.approve(address(STK_TOKEN), amount);
+    REX_TOKEN.approve(address(STK_TOKEN), amount);
     STK_TOKEN.stake(user, amount);
     vm.stopPrank();
   }
